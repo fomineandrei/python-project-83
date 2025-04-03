@@ -1,4 +1,4 @@
-### Hexlet tests and linter status:
 [![Actions Status](https://github.com/fomineandrei/python-project-83/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/fomineandrei/python-project-83/actions)
-### My tests
 [![my tests](https://github.com/fomineandrei/python-project-83/actions/workflows/my_tests.yml/badge.svg)](https://github.com/fomineandrei/python-project-83/actions/workflows/my_tests.yml)
+[![Maintainability](https://qlty.sh/badges/77fdcfe9-a448-43c2-a7c5-8f08e96cb9d4/maintainability.svg)](https://qlty.sh/gh/fomineandrei/projects/python-project-50)
+[![Code Coverage](https://qlty.sh/badges/77fdcfe9-a448-43c2-a7c5-8f08e96cb9d4/test_coverage.svg)](https://qlty.sh/gh/fomineandrei/projects/python-project-50)
