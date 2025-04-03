@@ -27,10 +27,7 @@ jobs:
           make lint
           make test
       - name: Test & publish code coverage
-        uses: paambaati/codeclimate-action@v5.0.0
-        if: github.ref_name == 'main'
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        with:
-          coverageCommand: make test-coverage
-          debug: true
+        - uses: qltysh/qlty-action/coverage@main
+          with:
+            coverage-token: {{secrets.QLTY_COVERAGE_TOKEN}}
+            files: coverage.xml
