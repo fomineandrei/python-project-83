@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Анализатор страниц by Fomine Andrei{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  </head>
+  <body class="min-vh-100 d-flex flex-column">
+    <header class="flex-shrink-0">
+      <nav class="navbar align-items-baseline navbar-expand-md bg-dark px-3">
+        <a class="navbar-brand text-light" href="/">Анализатор страниц</a>
+        <div>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Сайты</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <main class="flex-grow-1">
+      {% block main %}
+      <div class="container-fluid container-lg mt-5">
+        <div class="row">
+          <div class="col-12 col-lg-8 mx-auto border rounded p-3 bg-light">
+            <h1 class="display-3">Анализатор страниц</h1>
+            <h2 class="lead">Бесплатно проверяйте сайты на SEO-пригодность</h2>
+            <div class="container-fluid mx-0 p-0">
+              <form class="row my-3 mx-0 p-0" action="/urls" method="POST">
+                <label class="visually-hidden">Введите адрес сайта</label>
+                <input type="text" class="col-10 col-lg-7 form-control-lg rounded me-3 mt-1 text-center" required placeholder="https://example.com">
+                <button type="submit" class="col-10 col-lg-4 col-xl-3 btn btn-primary px-3 mt-1 text-uppercase">Проверить</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endblock %}
+    </main>
+    <footer class="d-flex justify-content-center bg-secondary">
+      <a class="p-2" href="https://vk.com/fomineandrei_adm">Fomine Andrei</a>
+      <p class="px-2 pt-2 text-light">2025</p>
+    </footer>
+  </body>
+</html>
