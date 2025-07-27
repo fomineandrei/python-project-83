@@ -1,0 +1,61 @@
+{% extends "index.html" %}
+
+
+{% block title %}Анализ страницы{% endblock %}
+
+
+{% block main %}
+<div class="container-fluid container-lg mt-3">
+  <h1>Сайт: {{ url.url }}</h1>
+  <div class="table-responsive mb-5">
+    <table class="table table-bordered table-hover mb-4" data-test="urls">
+      <tbody>
+        <tr>
+          <td scope="row">ID</td>
+          <td>{{ url.id }}</td>
+        </tr>
+        <tr>
+          <td scope="row">Имя</td>
+          <td>{{ url.url }}</td>
+        </tr>
+        <tr>
+          <td scope="row">Дата создания</td>
+          <td>{{ url.created_at }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div> 
+  <h2>Проверки</h2>
+  <form class="my-3 mx-0 p-0" action="{{ url_for("index.url_check", id=url.id) }}" method="POST">
+    <input type="submit" class="btn btn-primary" value="Запустить проверку">
+  </form>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Код ответа</th>
+          <th scope="col">h1</th>
+          <th scope="col">title</th>
+          <th scope="col">description</th>
+          <th scope="col">Дата создания</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if checks %}
+        {% for check in checks %}
+        <tr>
+          <td>{{ check['id'] }}</td>
+          <td>{{ check['status_code'] }}</td>
+          <td>{{ check['h1'] }}</td>
+          <td>{{ check['title'] }}</td>
+          <td>{{ check['description'] }}</td>
+          <td>{{ check['created_at'] }}</td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

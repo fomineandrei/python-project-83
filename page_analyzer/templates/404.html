@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+
+
+{% block title %}Анализатор страниц{% endblock %}
+
+
+{% block main %}
+<div class="container-lg mt-3">
+  <h1>Страница не найдена</h1>
+  <p>Здесь нет того, что вы ищете</p>
+  <p>
+    <a href="{{ url_for('index.main_page') }}">Вернуться на главную</a>
+  </p>
+</div>
+{% endblock %}
