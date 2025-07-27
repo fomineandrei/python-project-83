@@ -9,8 +9,9 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
-    from page_analyzer.views import index
+    from page_analyzer.views import index, not_found
     app.register_blueprint(index)
+    app.register_error_handler(404, not_found)
 
     return app
 
