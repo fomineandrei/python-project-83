@@ -7,3 +7,4 @@ __pycache__/
 coverage.xml
 coverage.lcov
 .env
+.ruff_cache/
