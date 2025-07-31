@@ -22,9 +22,9 @@
         {% for site in sites %}
         <tr>
           <td>{{ site.id }}</td>
-          <td><a href="{{ url_for('index.url_info', id=site.id) }}">{{ site.url }}</a></td>
-          <td>{% if site['check_date'] %}{{ site['check_date'] }}{% endif %}</td>
-          <td>{% if site['status_code'] %}{{ site['status_code'] }}{% endif %}</td>
+          <td><a href="{{ url_for('index.url_info', id=site.id) }}">{{ site.name }}</a></td>
+          <td>{% if site.last_check %}{{ site.last_check }}{% endif %}</td>
+          <td>{% if site.status_code %}{{ site.status_code }}{% endif %}</td>
         </tr>
         {% endfor %}
         {% endif %}

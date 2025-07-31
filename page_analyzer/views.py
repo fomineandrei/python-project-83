@@ -11,7 +11,7 @@ from flask import (
     url_for,
 )
 
-from page_analyzer.models import Urls
+from page_analyzer.models import Urls, UrlsUrl
 
 index = Blueprint('index', __name__, url_prefix='/')
 
@@ -25,9 +25,11 @@ def main_page():
 
 @index.route('/urls', methods=["GET"])
 def urls_get():
-    urls = Urls()
-    sites = urls.all_urls
     messages = get_flashed_messages(with_categories=True)
+    urls = Urls()
+    
+    sites = urls.all_urls
+
     return render_template('urls/index.html',
                            sites=sites,
                            messages=messages)
@@ -42,21 +44,21 @@ def urls_post():
     
     domain = urlparse(url). \
         _replace(path='', params='', query='', fragment='').geturl()
+
+    url_in_db = Urls().find_by_url(domain)  
     
-    url_obj = Urls()
-    
-    url_in_db = url_obj.find_by_url(domain)
-    if url_in_db:
+    if url_in_db.id:
         flash("Страница уже существует.", "alert alert-info")
-        return redirect(url_for('index.url_info', id=url_obj.id))
+        return redirect(url_for('index.url_info', id=url_in_db.id))
     return redirect(url_for('index.urls_add_new', domain=domain), 307)
 
 
 @index.route('/urls/add', methods=["POST"])
 def urls_add_new():
     domain = request.args.get('domain')
-    new_url = Urls()
-    new_url.add_new_url(domain)
+    
+    new_url = Urls().add_new_url(domain)
+    
     flash("Страница успешно добавлена.", "alert alert-success")
     return redirect(url_for("index.url_info", id=new_url.id))
 
@@ -64,22 +66,24 @@ def urls_add_new():
 @index.route('/urls/<id>', methods=['GET'])
 def url_info(id):
     messages = get_flashed_messages(with_categories=True)
-    url = Urls()
-    check_by_id = url.find_url_by_id(id)
-    checks = {}
-    if check_by_id:
+
+    url_in_db = Urls().find_by_id(id)
+    
+    if url_in_db.id:
+        checks = UrlsUrl(url_id=id).url_checks
         return render_template("urls/url_check.html",
                             messages=messages,
-                            url=url,
+                            url=url_in_db,
                             checks=checks)
-    return render_template('404.html'), 404
-    
-
-@index.errorhandler(404)
-def not_found(error):
     return render_template('404.html'), 404
 
 
 @index.route('/urls/<id>/check', methods=['POST'])
 def url_check(id):
-    return {}
+    new_check = UrlsUrl().new_check(id)
+    return redirect(url_for("index.url_info", id=new_check.url_id))
+    
+
+@index.errorhandler(404)
+def not_found(error):
+    return render_template('404.html'), 404

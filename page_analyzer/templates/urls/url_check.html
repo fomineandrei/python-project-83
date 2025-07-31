@@ -30,7 +30,7 @@
     <input type="submit" class="btn btn-primary" value="Запустить проверку">
   </form>
   <div class="table-responsive">
-    <table class="table table-bordered table-hover">
+    <table class="table table-bordered table-hover" data-test="checks">
       <thead>
         <tr>
           <th scope="col">ID</th>
@@ -45,12 +45,12 @@
         {% if checks %}
         {% for check in checks %}
         <tr>
-          <td>{{ check['id'] }}</td>
-          <td>{{ check['status_code'] }}</td>
-          <td>{{ check['h1'] }}</td>
-          <td>{{ check['title'] }}</td>
-          <td>{{ check['description'] }}</td>
-          <td>{{ check['created_at'] }}</td>
+          <td>{{ check.id }}</td>
+          <td>{% if check.status_code %}{{ check.status_code }}{% endif %}</td>
+          <td>{% if check.h1 %}{{ check.h1 }}{% endif %}</td>
+          <td>{% if check.title %}{{ check.title }}{% endif %}</td>
+          <td>{% if check.description %}{{ check.description }}{% endif %}</td>
+          <td>{{ check.created_at }}</td>
         </tr>
         {% endfor %}
         {% endif %}
