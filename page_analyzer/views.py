@@ -85,7 +85,7 @@ def url_check(id):
     status_code = get_request(url.name)
     if not status_code:
         flash("Произошла ошибка при проверке", "alert alert-danger")
-        redirect(url_for("index.url_info", id=url.id))
+        return redirect(url_for("index.url_info", id=url.id))
     new_check = UrlsUrl(url_id=url.id, status_code=status_code)
     new_check.save()
     return redirect(url_for("index.url_info", id=url.id))

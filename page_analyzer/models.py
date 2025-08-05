@@ -39,18 +39,20 @@ class Urls(DBConnect):
         conn = self.connect()
         sql = """SELECT urls.id AS id,
                     urls.name AS name,
-                    last_checks.created_at AS last_check,
+                    CAST(last_checks.created_at AS DATE) AS last_check,
                     checks.status_code AS status_code
                  FROM urls
-                 LEFT JOIN (SELECT url_id,
+                 LEFT JOIN (
+                            SELECT url_id,
                                 MAX(created_at) AS created_at
                             FROM url_checks
-                            GROUP BY url_id) AS last_checks
-                    ON id=last_checks.url_id
+                            GROUP BY url_id
+                            ) AS last_checks ON
+                    id=last_checks.url_id
                  LEFT JOIN url_checks AS checks ON
                     urls.id=checks.url_id 
                         AND last_checks.created_at=checks.created_at
-                ORDER BY urls.created_at DESC"""
+                 ORDER BY urls.created_at DESC"""
         result = self.sql_query(conn, sql)
         conn.close()
         urls = []
