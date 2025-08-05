@@ -37,13 +37,20 @@ class Urls(DBConnect):
     @property
     def all_urls(self):
         conn = self.connect()
-        sql = """SELECT urls.id,
-                    name,
-                    CAST(MAX(url_checks.created_at) AS DATE) as last_check,
-                    status_code
-                FROM urls LEFT JOIN url_checks ON urls.id=url_checks.url_id
-                GROUP BY urls.id, name, status_code
-                ORDER BY urls.created_at DESC;"""
+        sql = """SELECT urls.id AS id,
+                    urls.name AS name,
+                    last_checks.created_at AS last_check,
+                    checks.status_code AS status_code
+                 FROM urls
+                 LEFT JOIN (SELECT url_id,
+                                MAX(created_at) AS created_at
+                            FROM url_checks
+                            GROUP BY url_id) AS last_checks
+                    ON id=last_checks.url_id
+                 LEFT JOIN url_checks AS checks ON
+                    urls.id=checks.url_id 
+                        AND last_checks.created_at=checks.created_at
+                ORDER BY urls.created_at DESC"""
         result = self.sql_query(conn, sql)
         conn.close()
         urls = []
@@ -66,7 +73,7 @@ class Urls(DBConnect):
             check_result = result[0]
             self.created_at = check_result.get("created_at")
             self.id = check_result.get("id")
-            self.url = check_result.get("name")
+            self.name = check_result.get("name")
         return self
          
     def find_by_url(self, url):
@@ -116,9 +123,10 @@ class UrlsUrl(Urls):
                     h1,
                     title,
                     description,
-                    CAST(created_at AS DATE)    
+                    CAST(created_at AS DATE)   
                 FROM url_checks
-                WHERE url_id=%(url_id)s"""
+                WHERE url_id=%(url_id)s
+                ORDER BY url_checks.created_at DESC"""
         sql_kwargs = {"url_id": self.url_id}
         conn = self.connect()
         result = self.sql_query(conn, sql, **sql_kwargs)
@@ -128,13 +136,15 @@ class UrlsUrl(Urls):
             checks.append(check)
         return checks
 
-    def new_check(self, url_id):
+    def save(self):
         conn = self.connect()
-        sql = """INSERT INTO url_checks (url_id, created_at)
-                VALUES (%(url_id)s, %(created_at)s) RETURNING id;"""
-        self.url_id = url_id
+        sql = """INSERT INTO url_checks (url_id, created_at, status_code)
+                VALUES (%(url_id)s, %(created_at)s, %(status_code)s)
+                RETURNING id;"""
         self.created_at = datetime.datetime.now().replace(microsecond=0)
-        sql_kwargs = {"url_id": self.url_id, "created_at": self.created_at}
+        sql_kwargs = {"url_id": self.url_id, 
+                      "created_at": self.created_at, 
+                      "status_code": self.status_code}
         self.sql_query(conn, sql, **sql_kwargs)
         conn.commit()
         conn.close()

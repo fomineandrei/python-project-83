@@ -11,6 +11,7 @@ from flask import (
     url_for,
 )
 
+from page_analyzer.http import get_request
 from page_analyzer.models import Urls, UrlsUrl
 
 index = Blueprint('index', __name__, url_prefix='/')
@@ -80,8 +81,14 @@ def url_info(id):
 
 @index.route('/urls/<id>/check', methods=['POST'])
 def url_check(id):
-    new_check = UrlsUrl().new_check(id)
-    return redirect(url_for("index.url_info", id=new_check.url_id))
+    url = Urls().find_by_id(id)
+    status_code = get_request(url.name)
+    if not status_code:
+        flash("Произошла ошибка при проверке", "alert alert-danger")
+        redirect(url_for("index.url_info", id=url.id))
+    new_check = UrlsUrl(url_id=url.id, status_code=status_code)
+    new_check.save()
+    return redirect(url_for("index.url_info", id=url.id))
     
 
 @index.errorhandler(404)
