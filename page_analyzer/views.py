@@ -11,10 +11,14 @@ from flask import (
     url_for,
 )
 
-from page_analyzer.http import get_request
-from page_analyzer.models import Urls, UrlsUrl
+from page_analyzer.http import get_http_response
+from page_analyzer.models.db_engine import db_engine
+from page_analyzer.models.models import Url, UrlCheck
 
 index = Blueprint('index', __name__, url_prefix='/')
+
+
+db = db_engine()
 
 
 @index.route('/')
@@ -27,9 +31,11 @@ def main_page():
 @index.route('/urls', methods=["GET"])
 def urls_get():
     messages = get_flashed_messages(with_categories=True)
-    urls = Urls()
-    
-    sites = urls.all_urls
+
+    connection = db.get_connection()
+    urls = db.get_urls(connection)
+    sites = [Url(**url) for url in urls]
+    db.connection_close(connection)
 
     return render_template('urls/index.html',
                            sites=sites,
@@ -45,12 +51,15 @@ def urls_post():
     
     domain = urlparse(url). \
         _replace(path='', params='', query='', fragment='').geturl()
-
-    url_in_db = Urls().find_by_url(domain)  
     
-    if url_in_db.id:
+    connection = db.get_connection()
+    url_in_db = db.find_url_by_name(connection, domain)
+    db.connection_close(connection)
+    
+    if url_in_db:
+        url = Url(**url_in_db)
         flash("Страница уже существует.", "alert alert-info")
-        return redirect(url_for('index.url_info', id=url_in_db.id))
+        return redirect(url_for('index.url_info', id=url.id))
     return redirect(url_for('index.urls_add_new', domain=domain), 307)
 
 
@@ -58,7 +67,11 @@ def urls_post():
 def urls_add_new():
     domain = request.args.get('domain')
     
-    new_url = Urls().add_new_url(domain)
+    connection = db.get_connection()
+    saved_url = db.save_url(connection, domain)
+    new_url = Url(**saved_url)
+    db.connection_commit(connection)
+    db.connection_close(connection)
     
     flash("Страница успешно добавлена.", "alert alert-success")
     return redirect(url_for("index.url_info", id=new_url.id))
@@ -68,27 +81,38 @@ def urls_add_new():
 def url_info(id):
     messages = get_flashed_messages(with_categories=True)
 
-    url_in_db = Urls().find_by_id(id)
+    connection = db.get_connection()
+    url_in_db = db.find_url_by_id(connection, id)
+    url = Url(**url_in_db)
     
-    if url_in_db.id:
-        checks = UrlsUrl(url_id=id).url_checks
+    if url.id:
+        checks_in_db = db.get_url_checks(connection, url.id)
+        checks = [UrlCheck(**check) for check in checks_in_db]
+        db.connection_close(connection)
         return render_template("urls/url_check.html",
                             messages=messages,
-                            url=url_in_db,
+                            url=url,
                             checks=checks)
+    db.connection_close(connection)
     return render_template('404.html'), 404
 
 
 @index.route('/urls/<id>/check', methods=['POST'])
 def url_check(id):
-    url = Urls().find_by_id(id)
-    status_code = get_request(url.name)
-    if not status_code:
+    connection = db.get_connection()
+    url_in_db = db.find_url_by_id(connection, id)
+    url = Url(**url_in_db)
+    http_response = get_http_response(url.name)
+    if not http_response.get('status_code'):
         flash("Произошла ошибка при проверке", "alert alert-danger")
         return redirect(url_for("index.url_info", id=url.id))
-    new_check = UrlsUrl(url_id=url.id, status_code=status_code)
-    new_check.save()
-    return redirect(url_for("index.url_info", id=url.id))
+    
+    url_info = UrlCheck(url_id=url.id, **http_response)
+    db.check_save(connection, url_info)
+    db.connection_commit(connection)
+    db.connection_close(connection)
+    flash("Страница успешно проверена", "alert alert-success")
+    return redirect(url_for("index.url_info", id=url_info.url_id))
     
 
 @index.errorhandler(404)
