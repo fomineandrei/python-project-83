@@ -24,7 +24,8 @@ jobs:
           make install
       - name: Make test database
         run: |
-          psql --version
+          apt install postgresql
+          createdb test_db
           make build
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
