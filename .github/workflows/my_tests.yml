@@ -24,7 +24,7 @@ jobs:
           make install
       - name: Make test database
         run: |
-          apt install postgresql
+          sudo apt install postgresql
           createdb test_db
           make build
         env:
