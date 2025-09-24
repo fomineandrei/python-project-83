@@ -24,7 +24,7 @@ jobs:
           make install
       - name: Make test database
         run: |
-          createdb test_db
+          psql --version
           make build
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
