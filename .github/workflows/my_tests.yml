@@ -25,7 +25,7 @@ jobs:
       - name: Make test database
         run: |
           sudo apt install postgresql
-          psql postgres
+          sudo service postgresql status
           make build
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
