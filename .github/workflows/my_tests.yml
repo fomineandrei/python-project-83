@@ -27,7 +27,7 @@ jobs:
           createdb test_db
           make build
         env:
-          DATABASE_URL: {{ secrets.DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
       - name: Run linter and pytest
         run: |
           make lint
