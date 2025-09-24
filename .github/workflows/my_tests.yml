@@ -22,6 +22,12 @@ jobs:
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
           make install
+      - name: Make test database
+        run: |
+          createdb test_db
+          make build
+        env:
+          DATABASE_URL: {{ secrets.DATABASE_URL }}
       - name: Run linter and pytest
         run: |
           make lint
