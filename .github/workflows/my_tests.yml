@@ -30,7 +30,7 @@ jobs:
           sudo apt install postgresql
           sudo systemctl start postgresql
           sudo su - postgres
-          createuser test
+          createuser -U postgres test_user
           make build
       - name: Run linter and pytest
         run: |
