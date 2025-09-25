@@ -27,9 +27,9 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           RUNNER_ALLOW_RUNASROOT: 1
         run: |
+          sudo su - postgres
           sudo apt install postgresql
           sudo systemctl start postgresql
-          sudo su - postgres
           createuser -U postgres test_user
           make build
       - name: Run linter and pytest
