@@ -26,8 +26,7 @@ jobs:
         run: |
           sudo apt install postgresql
           sudo systemctl start postgresql
-          su - postgres
-          psql -U postgres -d template1 -a -f tests/github_tests_data/db_for_github.sql
+          psql -U postgres template1
           make build
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
