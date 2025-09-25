@@ -23,15 +23,15 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           make install
       - name: Make test database
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          RUNNER_ALLOW_RUNASROOT: 1
         run: |
           sudo apt install postgresql
           sudo systemctl start postgresql
           sudo su - postgres
           createuser test
           make build
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          RUNNER_ALLOW_RUNASROOT: 1
       - name: Run linter and pytest
         run: |
           make lint
