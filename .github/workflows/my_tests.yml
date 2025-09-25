@@ -30,6 +30,7 @@ jobs:
           make build
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          RUNNER_ALLOW_RUNASROOT: 1
       - name: Run linter and pytest
         run: |
           make lint
