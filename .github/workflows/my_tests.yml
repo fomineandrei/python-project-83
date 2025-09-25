@@ -26,6 +26,7 @@ jobs:
         run: |
           sudo apt install postgresql
           sudo systemctl start postgresql
+          su - postgres
           psql -U postgres template1
           make build
         env:
