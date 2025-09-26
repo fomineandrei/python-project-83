@@ -31,6 +31,7 @@ jobs:
           sudo apt install postgresql postgresql-contrib
           sudo systemctl start postgresql.service
           sudo -i -u postgres
+          whoami
           psql -a -f tests/github_tests_data/db_for_github.sql
       - name: Run linter and pytest
         run: |
