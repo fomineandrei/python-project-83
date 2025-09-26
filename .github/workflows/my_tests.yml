@@ -27,18 +27,11 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           RUNNER_ALLOW_RUNASROOT: 1
         run: |
-          ./configure
-          make
-          su
-          make install
-          adduser postgres
-          mkdir /usr/local/pgsql/data
-          chown postgres /usr/local/pgsql/data
-          su - postgres
-          /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
-          /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start
-          /usr/local/pgsql/bin/createdb test
-          /usr/local/pgsql/bin/psql test
+          sudo apt update
+          sudo apt install postgresql postgresql-contrib
+          sudo systemctl start postgresql.service
+          sudo -i -u postgres
+          psql -a -f tests/github_tests_data/db_for_github.sql
       - name: Run linter and pytest
         run: |
           make lint
