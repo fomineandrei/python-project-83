@@ -23,18 +23,11 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           make install
       - name: Make test database
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          RUNNER_ALLOW_RUNASROOT: 1
         run: |
-          sudo apt update
-          sudo apt install postgresql postgresql-contrib
-          sudo systemctl start postgresql.service
-          sudo -i -u postgres
-          whoami
-          psql -a -f tests/github_tests_data/db_for_github.sql
+          docker run -p 5432:5432 -e POSTGRES_USER=${{ secrets.DB_USER }} -e POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }} -e POSTGRES_DB=${{ secrets.DB_NAME }} -d -v postgres
       - name: Run linter and pytest
+        env:
+          DATABASE_URL: 'postgresql://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@localhost:5432/${{ secrets.DB_NAME }}'
         run: |
           make lint
           make test
-
