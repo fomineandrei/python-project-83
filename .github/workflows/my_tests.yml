@@ -31,6 +31,6 @@ jobs:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
           docker ps
-          docker exec -i test psql -U test -d test_db
+          docker exec --network=host -i test psql -U test -d test_db
           make lint
           make test
