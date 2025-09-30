@@ -30,6 +30,6 @@ jobs:
           DATABASE_URL: 'postgresql://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@localhost:5432/${{ secrets.DB_NAME }}'
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
-          docker exec -it test ip addr
+          docker ps
           make lint
           make test
