@@ -28,6 +28,7 @@ jobs:
       - name: Run linter and pytest
         env:
           DATABASE_URL: 'postgresql://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@localhost:5432/${{ secrets.DB_NAME }}'
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
           make lint
           make test
