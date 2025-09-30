@@ -24,7 +24,7 @@ jobs:
           make install
       - name: Make test database
         run:
-          docker run --name test -p 127.0.0.1:5432:0.0.0.0:5432 -e POSTGRES_USER=${{ secrets.DB_USER }} -e POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }} -e POSTGRES_DB=${{ secrets.DB_NAME }} -d -v "/home/runner/work/python-project-83/python-project-83/":/docker-entrypoint-initdb.d postgres:14.19
+          docker run --name test -p 5432:0.0.0.0:5432 -e POSTGRES_USER=${{ secrets.DB_USER }} -e POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }} -e POSTGRES_DB=${{ secrets.DB_NAME }} -d -v "/home/runner/work/python-project-83/python-project-83/":/docker-entrypoint-initdb.d postgres:14.19
       - name: Run linter and pytest
         env:
           DATABASE_URL: 'postgresql://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@localhost:5432/${{ secrets.DB_NAME }}'
