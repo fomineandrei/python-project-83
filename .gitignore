@@ -8,3 +8,4 @@ coverage.xml
 coverage.lcov
 .env
 .ruff_cache/
+tests/

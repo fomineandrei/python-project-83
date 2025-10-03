@@ -4,7 +4,7 @@ install:
 run:
 	uv run page_analyzer
 
-local-test:
+test:
 	uv run pytest
 
 test-coverage:
