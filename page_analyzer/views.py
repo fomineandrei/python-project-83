@@ -47,7 +47,7 @@ def urls_post():
     url = request.form.get('url')
     if validators.url(url) is not True:
         flash("Некорректный URL", "alert alert-danger")
-        return redirect(url_for('index.main_page', url=url))
+        return redirect(url_for('index.main_page', url=url), 422)
     
     domain = urlparse(url). \
         _replace(path='', params='', query='', fragment='').geturl()
