@@ -50,7 +50,7 @@ def urls_post():
         flash("Некорректный URL", "alert alert-danger")
         response = make_response(render_template('index.html'))
         response.status_code = 422
-        return redirect(url_for('index.main_page', url=url), Response=response)
+        return redirect(url_for('index.main_page', url=url), response)
     
     domain = urlparse(url). \
         _replace(path='', params='', query='', fragment='').geturl()
