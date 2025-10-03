@@ -20,7 +20,7 @@
 
 ## Test:
 
-### 1. This app has built-in tests. You can run tests with command: make test
+### 1. This app has built-in tests. You can run tests with command: make local-test
 
 ### 2. You can see app with browser:
 ###    Start dev server: make dev
