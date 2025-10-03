@@ -60,6 +60,7 @@ def urls_post():
         url = Url(**url_in_db)
         flash("Страница уже существует.", "alert alert-info")
         return redirect(url_for('index.url_info', id=url.id))
+    
     return redirect(url_for('index.urls_add_new', domain=domain), 307)
 
 

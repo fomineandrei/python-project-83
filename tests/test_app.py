@@ -171,8 +171,3 @@ def test_url_check(connection):
     assert url_test_data.h1 == check.get('h1')
     assert url_test_data.title == check.get('title')
     assert url_test_data.description == check.get('description')
-
-
-
-
-
