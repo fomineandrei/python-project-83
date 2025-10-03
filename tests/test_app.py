@@ -7,7 +7,7 @@ os.environ["TEST"] = 'True'
 
 from page_analyzer.app import create_app
 from page_analyzer.http import get_http_response
-from page_analyzer.models.db_engine import db_engine
+from page_analyzer.models.db import db_engine
 from page_analyzer.models.models import Url, UrlCheck
 from tests.test_data.http_test import FakeHttp
 

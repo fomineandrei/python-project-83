@@ -124,3 +124,33 @@ class DataBase:
             curs.execute(query, query_kwargs)
             id = curs.fetchone()
         return id | query_kwargs
+    
+
+class DataBaseTest(DataBase):
+    def __init__(self):
+        self.connection = super().get_connection()
+
+    def get_connection(self):
+        return self.connection
+
+    def connection_commit(self, conn):
+        pass
+    
+    def connection_close(self, conn):
+        pass
+    
+
+def current_db():
+    test_env = os.getenv("TEST")
+    if test_env == "True":
+        db = DataBaseTest()
+    else:
+        db = DataBase()
+    
+    def wrapper():
+        return db
+    
+    return wrapper
+
+
+db_engine = current_db()
