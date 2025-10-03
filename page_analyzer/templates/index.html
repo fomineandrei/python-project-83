@@ -38,7 +38,7 @@
               <form class="row my-3 mx-0 p-0" action="{{ url_for("index.urls_post") }}" method="POST">
                 <label class="visually-hidden">Введите адрес сайта</label>
                 <input name="url" type="text" class="col-10 col-lg-7 form-control-lg rounded me-3 mt-1 text-center text-lg-start" required placeholder="https://example.com" value="{% if value %}{{ value }}{% endif %}">
-                <button type="submit" class="col-10 col-lg-4 col-xl-3 btn btn-primary px-3 mt-1 text-uppercase">Проверить</button>
+                <input type="submit" class="col-10 col-lg-4 col-xl-3 btn btn-primary px-3 mt-1 text-uppercase" value="Проверить">
               </form>
             </div>
           </div>
