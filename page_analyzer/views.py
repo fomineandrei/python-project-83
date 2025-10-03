@@ -5,7 +5,6 @@ from flask import (
     Blueprint,
     flash,
     get_flashed_messages,
-    make_response,
     redirect,
     render_template,
     request,
@@ -26,14 +25,10 @@ db = db_engine()
 def main_page():
     value = request.args.get('url')
     messages = get_flashed_messages(with_categories=True)
-    response = make_response(render_template(
-        'index.html', 
-        messages=messages, 
-        value=value)
-        )
     if value:
-        response.status_code = 422
-    return response
+        return render_template(
+            'index.html', messages=messages, value=value), 422
+    return render_template('index.html', messages=messages, value=value)
 
 
 @index.route('/urls', methods=["GET"])
