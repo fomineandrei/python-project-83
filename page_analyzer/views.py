@@ -5,6 +5,7 @@ from flask import (
     Blueprint,
     flash,
     get_flashed_messages,
+    make_response,
     redirect,
     render_template,
     request,
@@ -47,7 +48,9 @@ def urls_post():
     url = request.form.get('url')
     if validators.url(url) is not True:
         flash("Некорректный URL", "alert alert-danger")
-        return redirect(url_for('index.main_page', url=url), 422)
+        response = make_response(render_template('index.html'))
+        response.status_code = 422
+        return redirect(url_for('index.main_page', url=url), Response=response)
     
     domain = urlparse(url). \
         _replace(path='', params='', query='', fragment='').geturl()
