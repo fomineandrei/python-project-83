@@ -23,12 +23,8 @@ db = db_engine()
 
 @index.route('/')
 def main_page():
-    value = request.args.get('url')
     messages = get_flashed_messages(with_categories=True)
-    if value:
-        return render_template(
-            'index.html', messages=messages, value=value), 422
-    return render_template('index.html', messages=messages, value=value)
+    return render_template('index.html', messages=messages)
 
 
 @index.route('/urls', methods=["GET"])
@@ -50,7 +46,8 @@ def urls_post():
     url = request.form.get('url')
     if validators.url(url) is not True:
         flash("Некорректный URL", "alert alert-danger")
-        return redirect(url_for('index.main_page', url=url))
+        messages = get_flashed_messages(with_categories=True)
+        return render_template('index.html', messages=messages, value=url), 422
     
     domain = urlparse(url). \
         _replace(path='', params='', query='', fragment='').geturl()
