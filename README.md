@@ -1,5 +1,5 @@
 [![Actions Status](https://github.com/fomineandrei/python-project-83/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/fomineandrei/python-project-83/actions)
-[![Maintainability](https://qlty.sh/badges/98ca09e8-84bf-4f9f-bf50-759b678811af/maintainability.svg)](https://qlty.sh/gh/fomineandrei/projects/python-project-83)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=fomineandrei_python-project-83&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=fomineandrei_python-project-83)
 
 
 # Page Analyzer app
