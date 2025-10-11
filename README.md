@@ -7,18 +7,18 @@
 ### This app analyzes the main headers of website home pages.
 
 ## Technologies Used:
-| Инструмент                                                                       |
-|----------------------------------------------------------------------------------|
-| [uv](https://docs.astral.sh/uv/)                                                 |
-| [ruff](https://docs.astral.sh/ruff/)                                             |
-| [Flask](https://flask.palletsprojects.com/en/stable/)                            |
-| [Gunicorn](https://docs.gunicorn.org/en/latest/index.html)                       |
-| [python-dotenv](https://pypi.org/project/python-dotenv/)                         |
-| [Bootstrap](https://getbootstrap.com/docs/5.3/getting-started/introduction/)     |
-| [Psycopg](https://getbootstrap.com/docs/5.3/getting-started/introduction/)       |
-| [validators](https://validators.readthedocs.io/en/latest/#module-validators.url) |
-| [Requests](https://requests.readthedocs.io/en/latest/)                           |
-| [Beautifulsoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)          |
+| Инструмент                                                                                    |
+|-----------------------------------------------------------------------------------------------|
+| uv            | [https://docs.astral.sh/uv/](https://docs.astral.sh/uv/)                      |
+| ruff          | [https://docs.astral.sh/ruff/](https://docs.astral.sh/ruff/)                                |
+| Flask         | [https://flask.palletsprojects.com/en/stable/](https://flask.palletsprojects.com/en/stable/)|
+| Gunicorn      | [https://docs.gunicorn.org/en/latest/index.html](https://docs.gunicorn.org/en/latest/index.html)|
+| python-dotenv | [https://pypi.org/project/python-dotenv/](https://pypi.org/project/python-dotenv/)|
+| Bootstrap     | [https://getbootstrap.com/docs/5.3/getting-started/introduction/](https://getbootstrap.com/docs/5.3/getting-started/introduction/)|
+| Psycopg       | [https://getbootstrap.com/docs/5.3/getting-started/introduction/](https://getbootstrap.com/docs/5.3/getting-started/introduction/)|
+| validators    | [https://validators.readthedocs.io/en/latest/#module-validators.url](https://validators.readthedocs.io/en/latest/#module-validators.url |
+| Requests      | [https://requests.readthedocs.io/en/latest/](https://requests.readthedocs.io/en/latest/)|
+| Beautifulsoup | [https://www.crummy.com/software/BeautifulSoup/bs4/doc/](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)|
 
 ## Install:
 
