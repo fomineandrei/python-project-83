@@ -7,7 +7,7 @@
 ### This app analyzes the main headers of website home pages.
 
 ## Technologies Used:
-| Инструмент    |                                                                                |
+| Tool          |                          Info url                                             |
 |---------------|-------------------------------------------------------------------------------|
 | uv            | [https://docs.astral.sh/uv/](https://docs.astral.sh/uv/)                      |
 | ruff          | [https://docs.astral.sh/ruff/](https://docs.astral.sh/ruff/)                                |
