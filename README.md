@@ -7,8 +7,8 @@
 ### This app analyzes the main headers of website home pages.
 
 ## Technologies Used:
-| Инструмент                                                                                    |
-|-----------------------------------------------------------------------------------------------|
+| Инструмент    |                                                                                |
+|---------------|-------------------------------------------------------------------------------|
 | uv            | [https://docs.astral.sh/uv/](https://docs.astral.sh/uv/)                      |
 | ruff          | [https://docs.astral.sh/ruff/](https://docs.astral.sh/ruff/)                                |
 | Flask         | [https://flask.palletsprojects.com/en/stable/](https://flask.palletsprojects.com/en/stable/)|
