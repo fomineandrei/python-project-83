@@ -29,8 +29,10 @@
 git clone git@github.com:fomineandrei/python-project-83.git
 ```
 ### 2. Create .env file in root directory. In this file must be two environments:
-###    SECRET_KEY='your_secret_key'
-###    DATABASE_URL='postgresql://{db_user}:{db_password}@localhost:5432/{db_name}'
+```
+SECRET_KEY='{your_secret_key}'
+DATABASE_URL='postgresql://{db_user}:{db_password}@localhost:5432/{db_name}'
+```
 ### 3. Make global environment with command:
 ```
 export DATABASE_URL='postgresql://{db_user}:{db_password}@localhost:5432/{db_name}'
