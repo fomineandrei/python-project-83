@@ -12,7 +12,7 @@ from flask import (
 )
 
 from page_analyzer.http import get_http_response
-from page_analyzer.models.db import Urls
+from page_analyzer.models.db import UrlsRepository
 from page_analyzer.models.models import Url, UrlCheck
 
 index = Blueprint('index', __name__, url_prefix='/')
@@ -28,7 +28,7 @@ def main_page():
 def urls_get():
     messages = get_flashed_messages(with_categories=True)
 
-    urls = Urls().get_urls()
+    urls = UrlsRepository().get_urls()
     sites = [Url(**url) for url in urls]
 
     return render_template('urls/index.html',
@@ -47,7 +47,7 @@ def urls_post():
     domain = urlparse(url). \
         _replace(path='', params='', query='', fragment='').geturl()
     
-    url_in_db = Urls().find_url_by_name(domain)
+    url_in_db = UrlsRepository().find_url_by_name(domain)
     
     if url_in_db:
         url = Url(**url_in_db)
@@ -61,7 +61,7 @@ def urls_post():
 def urls_add_new():
     domain = request.args.get('domain')
     
-    saved_url = Urls().save_url(domain)
+    saved_url = UrlsRepository().save_url(domain)
     new_url = Url(**saved_url)
     
     flash("Страница успешно добавлена.", "alert alert-success")
@@ -72,11 +72,11 @@ def urls_add_new():
 def url_info(id):
     messages = get_flashed_messages(with_categories=True)
 
-    url_in_db = Urls().find_url_by_id(id)
+    url_in_db = UrlsRepository().find_url_by_id(id)
     url = Url(**url_in_db)
     
     if url.id:
-        checks_in_db = Urls().get_url_checks(url.id)
+        checks_in_db = UrlsRepository().get_url_checks(url.id)
         checks = [UrlCheck(**check) for check in checks_in_db]
         return render_template("urls/url_check.html",
                             messages=messages,
@@ -87,7 +87,7 @@ def url_info(id):
 
 @index.route('/urls/<id>/check', methods=['POST'])
 def url_check(id):
-    url_in_db = Urls().find_url_by_id(id)
+    url_in_db = UrlsRepository().find_url_by_id(id)
     url = Url(**url_in_db)
     http_response = get_http_response(url.name)
     if not http_response.get('status_code'):
@@ -95,7 +95,7 @@ def url_check(id):
         return redirect(url_for("index.url_info", id=url.id))
     
     url_info = UrlCheck(url_id=url.id, **http_response)
-    Urls().check_save(url_info)
+    UrlsRepository().check_save(url_info)
     flash("Страница успешно проверена", "alert alert-success")
     return redirect(url_for("index.url_info", id=url_info.url_id))
     

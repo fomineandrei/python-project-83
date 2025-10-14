@@ -24,7 +24,7 @@ class DBConnection:
         self.conn.commit()
 
 
-class Urls:
+class UrlsRepository:
     def __init__(self):
         self.cursor = DBConnection()
 
