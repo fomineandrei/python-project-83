@@ -8,19 +8,27 @@ from psycopg2.extras import RealDictCursor
 load_dotenv()
 
 
-class DataBase:
-    
-    def get_connection(self):
-        db_url = os.getenv("DATABASE_URL")
-        return psycopg2.connect(db_url)
-    
-    def connection_commit(self, conn):
-        conn.commit()
+class DBConnection:
+    def __init__(self):
+        self.database_url = os.getenv("DATABASE_URL")
+        self.conn = psycopg2.connect(
+            self.database_url,
+            cursor_factory=RealDictCursor
+        )
 
-    def connection_close(self, conn):
-        conn.close()
+    def __enter__(self):
+        with self.conn as conn:
+            return conn.cursor()
 
-    def get_urls(self, conn):
+    def __exit__(self, type, value, traceback):
+        self.conn.commit()
+
+
+class Urls:
+    def __init__(self):
+        self.cursor = DBConnection()
+
+    def get_urls(self):
         query = """
             SELECT
                 urls.id AS id,
@@ -43,12 +51,12 @@ class DataBase:
                 WHERE max_checks.created_at=checks.created_at) AS last_checks ON
                 urls.id=last_checks.url_id
             ORDER BY urls.created_at DESC;"""
-        with conn.cursor(cursor_factory=RealDictCursor) as curs:
+        with self.cursor as curs:
             curs.execute(query)
             result = curs.fetchall()
         return result
         
-    def find_url_by_id(self, conn, id):
+    def find_url_by_id(self, id):
         query = """
             SELECT 
                 id,
@@ -57,12 +65,12 @@ class DataBase:
             FROM urls
             WHERE id=%(id)s;"""
         query_kwargs = {'id': id}
-        with conn.cursor(cursor_factory=RealDictCursor) as curs:
+        with self.cursor as curs:
             curs.execute(query, query_kwargs)
             result = curs.fetchone()
         return result
     
-    def find_url_by_name(self, conn, name):
+    def find_url_by_name(self, name):
         query = """
             SELECT 
                 id,
@@ -71,12 +79,12 @@ class DataBase:
             FROM urls
             WHERE name=%(name)s;"""
         query_kwargs = {'name': name}
-        with conn.cursor(cursor_factory=RealDictCursor) as curs:
+        with self.cursor as curs:
             curs.execute(query, query_kwargs)
             result = curs.fetchone()
         return result
 
-    def save_url(self, conn, url):
+    def save_url(self, url):
         query = """
             INSERT INTO urls (name, created_at)
             VALUES (%(name)s, %(created_at)s) RETURNING id;"""
@@ -84,12 +92,12 @@ class DataBase:
             'name': url,
             'created_at': datetime.datetime.now()
         }
-        with conn.cursor(cursor_factory=RealDictCursor) as curs:
+        with self.cursor as curs:
             curs.execute(query, query_kwargs)
             id = curs.fetchone()
         return id | query_kwargs
 
-    def get_url_checks(self, conn, url_id):
+    def get_url_checks(self, url_id):
         query = """SELECT
                     id,
                     status_code,
@@ -101,12 +109,12 @@ class DataBase:
                 WHERE url_id=%(url_id)s
                 ORDER BY url_checks.created_at DESC"""
         query_kwargs = {"url_id": url_id}
-        with conn.cursor(cursor_factory=RealDictCursor) as curs:
+        with self.cursor as curs:
             curs.execute(query, query_kwargs)
             result = curs.fetchall()
         return result
     
-    def check_save(self, conn, check):
+    def check_save(self, check):
         query = """
             INSERT INTO url_checks (url_id, created_at, status_code,
                 h1, title, description)
@@ -120,37 +128,7 @@ class DataBase:
             'description': check.description,
             'created_at': datetime.datetime.now()
         }
-        with conn.cursor(cursor_factory=RealDictCursor) as curs:
+        with self.cursor as curs:
             curs.execute(query, query_kwargs)
             id = curs.fetchone()
         return id | query_kwargs
-    
-
-class DataBaseTest(DataBase):
-    def __init__(self):
-        self.connection = super().get_connection()
-
-    def get_connection(self):
-        return self.connection
-
-    def connection_commit(self, conn):
-        pass
-    
-    def connection_close(self, conn):
-        pass
-    
-
-def current_db():
-    test_env = os.getenv("TEST")
-    if test_env == "True":
-        db = DataBaseTest()
-    else:
-        db = DataBase()
-    
-    def wrapper():
-        return db
-    
-    return wrapper
-
-
-db_engine = current_db()
