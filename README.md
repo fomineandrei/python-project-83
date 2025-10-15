@@ -64,3 +64,6 @@ make dev
 make start
 ```
 ### The app will be available from your computer at http://localhost:8000
+
+## Пример работы приложения можно посмотреть по ссылке: 
+### [https://python-project-83-ary4.onrender.com/](https://python-project-83-ary4.onrender.com/)
